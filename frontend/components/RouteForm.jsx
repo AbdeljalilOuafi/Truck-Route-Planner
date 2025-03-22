@@ -21,8 +21,19 @@ const RouteForm = ({ onSubmit }) => {
     current_location: null,
     pickup_location: null,
     dropoff_location: null,
-    current_cycle_hours: 0
+    current_cycle_hours: '0'
   });
+  
+  const handleCycleHoursChange = (e) => {
+    const value = e.target.value;
+    // Ensure value is a valid number or empty string
+    if (value === '' || (!isNaN(value) && value >= 0 && value <= 70)) {
+      setFormData(prev => ({
+        ...prev,
+        current_cycle_hours: value
+      }));
+    }
+  };
 
   const handlePlaceSelect = (place, field) => {
     if (place.geometry) {
@@ -103,11 +114,12 @@ const RouteForm = ({ onSubmit }) => {
         margin="normal"
         required
         value={formData.current_cycle_hours}
-        onChange={(e) => setFormData({
-          ...formData,
-          current_cycle_hours: parseFloat(e.target.value)
-        })}
-        inputProps={{ min: 0, max: 70, step: 0.5 }}
+        onChange={handleCycleHoursChange}
+        inputProps={{
+          min: 0,
+          max: 70,
+          step: 0.5,
+        }}
       />
 
       <Button

@@ -37,9 +37,9 @@ function App() {
   if (loadError) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">
-          Error loading Google Maps: Please check your API key and enabled services
-        </Alert>
+        <Box display="flex" justifyContent="center" my={4}>
+          <CircularProgress />
+        </Box>
       </Container>
     );
   }
