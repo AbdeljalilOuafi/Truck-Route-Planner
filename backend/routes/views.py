@@ -7,6 +7,7 @@ from .services.hos_service import HOSCalculator
 from .serializers import RouteInputSerializer, RouteOutputSerializer
 from .services.log_generator import LogSheetGenerator
 import datetime
+import json
 
 @api_view(['POST'])
 def calculate_route(request):
@@ -30,11 +31,14 @@ def calculate_route(request):
             destination=serializer.validated_data['dropoff_location'],
             waypoints=[serializer.validated_data['pickup_location']]
         )
+        
+        # im not actually dumping a json here, json.dumps() returns a string of the json and here im printing it
+        # this print statement is here to get myself familiarized with route_details sturcture returned by Google API
+        # planning to use this data to generate accurate log sheets for each stop of the route (refulling, rest stops, etc)
+        
+        # print("Route Details Structure:", json.dumps(route_details, indent=2)) 
 
-        # # Print route details to see its structure and how i can use it
-        # print("Route Details:", route_details)
-
-        # Prepare route info with consistent naming
+        # prepare route info 
         route_info = {
             'locations': {
                 'current': serializer.validated_data['current_location'],
@@ -43,6 +47,7 @@ def calculate_route(request):
             },
             'route_details': route_details
         }
+        
 
         # Calculate driving hours and breaks
         total_drive_time = route_details['duration'] / 3600
@@ -56,8 +61,7 @@ def calculate_route(request):
                 serializer.validated_data['pickup_location'],
                 serializer.validated_data['dropoff_location']
             ]
-        )
-        
+        )        
         # generate log sheets with route information
         log_generator = LogSheetGenerator()
         log_sheets = log_generator.generate_daily_logs(
