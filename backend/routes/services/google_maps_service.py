@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """google_maps_service module"""
 
-import googlemaps
 from django.conf import settings
 from typing import Dict, List, Any
+import googlemaps
+
 
 class GoogleMapsService:
     def __init__(self):
