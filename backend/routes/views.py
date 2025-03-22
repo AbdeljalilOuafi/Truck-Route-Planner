@@ -15,6 +15,9 @@ def calculate_route(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     try:
+        # Print the validated data to see its structure
+        print("Validated Data:", serializer.validated_data)
+
         # Initialize services
         maps_service = GoogleMapsService()
         hos_calculator = HOSCalculator(
@@ -28,8 +31,21 @@ def calculate_route(request):
             waypoints=[serializer.validated_data['pickup_location']]
         )
 
+        # Print route details to see its structure
+        print("Route Details:", route_details)
+
+        # Prepare route info with consistent naming
+        route_info = {
+            'locations': {
+                'current': serializer.validated_data['current_location'],
+                'pickup': serializer.validated_data['pickup_location'],
+                'dropoff': serializer.validated_data['dropoff_location']
+            },
+            'route_details': route_details
+        }
+
         # Calculate driving hours and breaks
-        total_drive_time = route_details['duration'] / 3600  # convert seconds to hours since route_details['duration'] is in seconds
+        total_drive_time = route_details['duration'] / 3600
         breaks = hos_calculator.calculate_breaks(total_drive_time)
 
         # Find fuel stops
@@ -41,11 +57,12 @@ def calculate_route(request):
             ]
         )
         
-        # generate log sheets
+        # Generate log sheets with route information
         log_generator = LogSheetGenerator()
         log_sheets = log_generator.generate_daily_logs(
             breaks=breaks,
-            start_time=datetime.datetime.now()
+            start_time=datetime.datetime.now(),
+            route_info=route_info
         )
 
         response_data = {
@@ -60,7 +77,10 @@ def calculate_route(request):
         return Response(response_data, status=status.HTTP_200_OK)
 
     except Exception as e:
+        import traceback
+        print("Error:", str(e))
+        print("Traceback:", traceback.format_exc())
         return Response(
-            {'error': f'Something went wrong, are you sure all the locations are valid and your API keys are in .env?, anyway here is the error: {str(e)}'},
+            {'error': f'Something went wrong: {str(e)}'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
