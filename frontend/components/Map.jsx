@@ -27,6 +27,9 @@ const Map = ({ route, stops, fuelStops }) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [map, setMap] = useState(null);
 
+  console.log('Stops:', stops);
+  console.log('Fuel Stops:', fuelStops);
+
   const decodePath = (encoded) => {
     if (!encoded) return [];
     
