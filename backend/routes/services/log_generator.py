@@ -12,7 +12,8 @@ class LogSheetGenerator:
             'break': 'SB',
             'pickup': 'ON',
             'dropoff': 'ON',
-            'off_duty': 'OFF'
+            'off_duty': 'OFF',
+            'fuel': 'ON'
         }
 
     def format_address(self, address: str) -> str:
@@ -36,9 +37,9 @@ class LogSheetGenerator:
         locations = route_info['locations']
         
         if activity['type'] == 'pickup':
-            return self.format_address(locations['pickup'].get('address'))
+            return f"Pickup at {self.format_address(locations['pickup'].get('address'))}"
         elif activity['type'] == 'dropoff':
-            return self.format_address(locations['dropoff'].get('address'))
+            return f"Dropoff at {self.format_address(locations['dropoff'].get('address'))}"
         elif activity['type'] == 'driving':
             current = self.format_address(locations['current'].get('address'))
             dropoff = self.format_address(locations['dropoff'].get('address'))
@@ -46,6 +47,9 @@ class LogSheetGenerator:
         elif activity['type'] == 'break':
             current = self.format_address(locations['current'].get('address'))
             return f"Rest Stop near {current}"
+        elif activity['type'] == 'fuel':
+            current = self.format_address(locations['current'].get('address'))
+            return f"Refueling at {current}"
         
         return self.format_address(activity.get('location', 'En Route'))
 

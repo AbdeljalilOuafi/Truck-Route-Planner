@@ -31,8 +31,8 @@ def calculate_route(request):
             waypoints=[serializer.validated_data['pickup_location']]
         )
 
-        # Print route details to see its structure
-        print("Route Details:", route_details)
+        # # Print route details to see its structure and how i can use it
+        # print("Route Details:", route_details)
 
         # Prepare route info with consistent naming
         route_info = {
@@ -46,9 +46,10 @@ def calculate_route(request):
 
         # Calculate driving hours and breaks
         total_drive_time = route_details['duration'] / 3600
-        breaks = hos_calculator.calculate_breaks(total_drive_time)
+        total_distance = route_details['distance'] / 1609.34  # convert meters to miles
+        breaks = hos_calculator.calculate_breaks(total_drive_time, total_distance)
 
-        # Find fuel stops
+        # find fuel stops using google places API
         fuel_stops = maps_service.find_fuel_stops(
             route_points=[
                 serializer.validated_data['current_location'],
@@ -57,7 +58,7 @@ def calculate_route(request):
             ]
         )
         
-        # Generate log sheets with route information
+        # generate log sheets with route information
         log_generator = LogSheetGenerator()
         log_sheets = log_generator.generate_daily_logs(
             breaks=breaks,
