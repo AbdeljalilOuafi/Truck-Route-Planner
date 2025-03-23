@@ -6,11 +6,10 @@ import Map from '../components/Map';
 import LogSheet from '../components/LogSheet';
 import { calculateRoute } from './services/api';
 
-// Define libraries array at the top level
 const libraries = ['places'];
 
 function App() {
-  // Google Maps loading state
+  // google Maps loading state
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -33,13 +32,13 @@ function App() {
     }
   };
 
-  // Handle Google Maps loading states
+  // handle Google Maps loading states
   if (loadError) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box display="flex" justifyContent="center" my={4}>
-          <CircularProgress />
-        </Box>
+        <Alert severity="error">
+          Error loading Google Maps: Please check your API key and enabled services
+        </Alert>
       </Container>
     );
   }
@@ -56,54 +55,63 @@ function App() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Route Planner & Log Generator
-      </Typography>
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Typography variant="h4" gutterBottom align="center">
+          Route Planner & Log Generator
+        </Typography>
 
-      <Paper sx={{ mb: 3, p: 2 }}>
-        <RouteForm onSubmit={handleSubmit} />
-      </Paper>
+        <Paper sx={{ 
+          mb: 3, 
+          p: 2, 
+          maxWidth: "600px", 
+          width: "100%" 
+        }}>
+          <RouteForm onSubmit={handleSubmit} />
+        </Paper>
 
-      {loading && (
-        <Box display="flex" justifyContent="center" my={4}>
-          <CircularProgress />
-        </Box>
-      )}
+        {loading && (
+          <Box display="flex" justifyContent="center" my={4} width="100%">
+            <CircularProgress />
+          </Box>
+        )}
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
-        </Alert>
-      )}
+        {error && (
+          <Box sx={{ maxWidth: "600px", width: "100%" }}>
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
+          </Box>
+        )}
 
-      {routeData && (
-        <>
-          <Paper sx={{ mb: 3, p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Route Map
-            </Typography>
-            <Map 
-              route={routeData}
-              stops={routeData.breaks}
-              fuelStops={routeData.fuel_stops}
-            />
-          </Paper>
+        {routeData && (
+          <Box sx={{ maxWidth: "600px", width: "100%" }}>
+            <Paper sx={{ mb: 3, p: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Route Map
+              </Typography>
+              <Map 
+                route={routeData}
+                stops={routeData.breaks}
+                fuelStops={routeData.fuel_stops}
+              />
+            </Paper>
 
-          <Paper sx={{ mb: 3, p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Trip Summary
-            </Typography>
-            <Typography>
-              Total Trip Duration: {routeData.total_trip_duration.toFixed(2)} hours
-            </Typography>
-            <Typography>
-              HOS Compliance: {routeData.hos_compliance ? '✅ Compliant' : '❌ Non-compliant'}
-            </Typography>
-          </Paper>
+            <Paper sx={{ mb: 3, p: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Trip Summary
+              </Typography>
+              <Typography>
+                Total Trip Duration: {routeData.total_trip_duration.toFixed(2)} hours
+              </Typography>
+              <Typography>
+                HOS Compliance: {routeData.hos_compliance ? '✅ Compliant' : '❌ Non-compliant'}
+              </Typography>
+            </Paper>
 
-          <LogSheet logSheets={routeData.log_sheets} />
-        </>
-      )}
+            <LogSheet logSheets={routeData.log_sheets} />
+          </Box>
+        )}
+      </Box>
     </Container>
   );
 }

@@ -1,4 +1,4 @@
-// src/App.jsx
+
 import { useState } from 'react';
 import { 
   Box, 
@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 
-// RouteForm component included in the same file for clarity
+
 const libraries = ['places'];
 
 const RouteForm = ({ onSubmit }) => {
@@ -26,7 +26,7 @@ const RouteForm = ({ onSubmit }) => {
   
   const handleCycleHoursChange = (e) => {
     const value = e.target.value;
-    // Ensure value is a valid number or empty string
+    // ensure value is a valid number or empty string
     if (value === '' || (!isNaN(value) && value >= 0 && value <= 70)) {
       setFormData(prev => ({
         ...prev,
@@ -58,7 +58,7 @@ const RouteForm = ({ onSubmit }) => {
   if (!isLoaded) return <CircularProgress />;
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ p: 2 }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ p: 10 }}>
       <Autocomplete
         onLoad={autocomplete => {
           autocomplete.addListener('place_changed', () => {
