@@ -78,8 +78,8 @@ The Truck Route Planner & ELD Logger is a comprehensive web application designed
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/truck-route-planner.git
-cd truck-route-planner
+git clone https://github.com/AbdeljalilOuafi/Truck-Route-Planner.git
+cd Truck-Route-Planner
 ```
 
 2. Backend Setup
@@ -95,7 +95,7 @@ pip install -r requirements.txt
 # Create .env file, assuming you're still in the backend directory
 touch  ../.env
 
-# Add your Google Maps API key to .env and your Django Secret Key
+# Add your Google Maps API key and your Django Secret Key to .env 
 echo "GOOGLE_MAPS_API_KEY=" > ../.env
 echo "DJANGO_SECRET=" > ../.env
 
