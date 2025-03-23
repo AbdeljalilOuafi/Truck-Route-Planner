@@ -6,6 +6,9 @@ import Map from '../components/Map';
 import LogSheet from '../components/LogSheet';
 import { calculateRoute } from './services/api';
 
+import { LinkedIn, GitHub, Email } from '@mui/icons-material';
+import { IconButton, Tooltip, Link as MuiLink } from '@mui/material';
+
 const libraries = ['places'];
 
 function App() {
@@ -111,6 +114,56 @@ function App() {
             <LogSheet logSheets={routeData.log_sheets} />
           </Box>
         )}
+          <Paper sx={{ 
+            mt: 4, 
+            p: 2, 
+            maxWidth: '600px', 
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+            <Typography variant="h6" gutterBottom>
+              Connect With Me
+            </Typography>
+            
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+              <Tooltip title="LinkedIn">
+                <IconButton 
+                  component={MuiLink} 
+                  href="https://www.linkedin.com/in/abdeljalil-ouafi-8036a7266/" 
+                  target="_blank"
+                  color="primary"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedIn fontSize="large" />
+                </IconButton>
+              </Tooltip>
+              
+              <Tooltip title="GitHub">
+                <IconButton 
+                  component={MuiLink} 
+                  href="https://github.com/AbdeljalilOuafi" 
+                  target="_blank"
+                  color="primary"
+                  aria-label="GitHub"
+                >
+                  <GitHub fontSize="large" />
+                </IconButton>
+              </Tooltip>
+              
+              <Tooltip title="Email">
+                <IconButton 
+                  component={MuiLink} 
+                  href="mailto:cv.ouafiabdeljalil@gmail.com" 
+                  color="primary"
+                  aria-label="Email"
+                >
+                  <Email fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Paper>
       </Box>
     </Container>
   );
