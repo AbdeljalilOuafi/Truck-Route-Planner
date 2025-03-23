@@ -182,6 +182,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 }
+```
 
 ## Contributors
 - Abdeljalil Ouafi - Initial work and core functionality
