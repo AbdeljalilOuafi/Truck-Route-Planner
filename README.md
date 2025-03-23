@@ -184,5 +184,36 @@ server {
 }
 ```
 
+## Running Gunicorn as a Systemd Service
+
+Create a service file:  
+```sh
+sudo vim /etc/systemd/system/truck-planner.service
+```
+
+Example service configuration:
+```
+[Unit]
+Description=Truck Planner Backend
+After=network.target
+
+[Service]
+User=<your_username>
+Group=<your_username>
+WorkingDirectory=<your_project_path>
+Environment="PATH=<your_venv_path>/bin"
+ExecStart=<your_venv_path>/bin/gunicorn --workers 3 --bind 127.0.0.1:8003 core.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Start and enable the service:
+```sh
+sudo systemctl start truck-planner
+sudo systemctl enable truck-planner  # ensure service starts at boot
+sudo systemctl status truck-planner  # check service status
+```
+
 ## Contributors
 - Abdeljalil Ouafi - Initial work and core functionality
