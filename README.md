@@ -143,5 +143,45 @@ npm run dev
 
 3. Access the application at http://localhost:5173
 
+
+## Deployment
+
+### Backend Deployment
+The backend is currently hosted on Google Cloud Platform with Nginx as a reverse proxy.
+
+#### Production Environment
+- **Domain**: [truck-route-planner.crafitori.com](https://truck-route-planner.crafitori.com)
+- **Health Check**: [/api/status/](https://truck-route-planner.crafitori.com/api/status/)
+- **Server**: Google Cloud Compute Engine
+- **Web Server**: Nginx
+- **WSGI Server**: Gunicorn
+- **SSL**: Let's Encrypt
+
+#### Server Configuration
+
+1. **Nginx Configuration**
+```nginx
+server {
+    server_name truck-route-planner.crafitori.com;
+
+    location /api/ {
+        proxy_pass http://localhost:8003/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/truck-route-planner.crafitori.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/truck-route-planner.crafitori.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
 ## Contributors
 - Abdeljalil Ouafi - Initial work and core functionality
